@@ -38,12 +38,13 @@
 
 .mainLeftLine {
   display: flex;
-
+  align-items: center;
   width: 100%;
 }
 
 .lineLogo {
   margin-right: 10px;
+  font-size: 25px;
 }
 
 .mainRight {
@@ -94,6 +95,10 @@
   color: white;
   font-size: 18px;
   border: none;
+}
+
+.signupButton:hover {
+  cursor: pointer;
 }
 
 .body {

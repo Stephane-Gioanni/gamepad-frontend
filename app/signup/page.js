@@ -6,6 +6,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Header from "../Components/Header";
 import { useRouter } from "next/navigation";
+import { LuUser } from "react-icons/lu";
+import { HiViewfinderCircle } from "react-icons/hi2";
+import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { IoIosMore } from "react-icons/io";
+import Loader from "../Components/Loader";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -40,7 +45,7 @@ export default function Signup() {
   console.log(token);
 
   return token ? (
-    <div>Déjà connecté</div>
+    <Loader></Loader>
   ) : (
     <div className={styles.signup}>
       <Header></Header>
@@ -50,22 +55,30 @@ export default function Signup() {
             <div className={styles.mainLeftBox}>
               <p className={styles.h2}>How it works?</p>
               <div className={styles.mainLeftLine}>
-                <span className={styles.lineLogo}>♦︎</span>
+                <div className={styles.lineLogo}>
+                  <HiViewfinderCircle />
+                </div>
                 <p>Check any infos you want about all the games existing </p>
               </div>
 
               <div className={styles.mainLeftLine}>
-                <span className={styles.lineLogo}>♦︎</span>
+                <div className={styles.lineLogo}>
+                  <LuUser />
+                </div>
                 <p>
                   Log in to your free account to be able to get all features
                 </p>
               </div>
               <div className={styles.mainLeftLine}>
-                <span className={styles.lineLogo}>♦︎</span>
+                <div className={styles.lineLogo}>
+                  <MdOutlineBookmarkAdd />
+                </div>
                 <p>Add a game to your collection</p>
               </div>
               <div className={styles.mainLeftLine}>
-                <span className={styles.lineLogo}>♦︎</span>
+                <span className={styles.lineLogo}>
+                  <IoIosMore />
+                </span>
                 <p>And more..</p>
               </div>
             </div>
