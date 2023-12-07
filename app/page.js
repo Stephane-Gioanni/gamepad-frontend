@@ -1,95 +1,129 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+/* eslint-disable @next/next/no-img-element */
+"use client";
+
+import { useEffect } from "react";
+import { useState } from "react";
+import styles from "./page.module.css";
+import axios from "axios";
+import Header from "./Components/Header";
+import Link from "next/link";
+import Image from "next/image";
+import Logo from "./Images/gamepad.png";
+import Loader from "./Components/Loader";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const [data, setData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchInput, setSearchInput] = useState("");
+  const [orderingField, setOrderingField] = useState("");
+  const [page, setPage] = useState(1);
+  const [selectedOption, setSelectedOption] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("https://api.rawg.io/api/games", {
+        params: {
+          key: "1682ef652d8e436f87287c77bc2c7abe",
+          search: searchInput,
+          ordering: orderingField,
+          ordering: selectedOption,
+          page: page,
+        },
+      });
+      console.log(response.data);
+      setData(response.data);
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [orderingField, searchInput, page, selectedOption]);
+
+  const handleOrderingChange = (newOrderingField) => {
+    setOrderingField(newOrderingField);
+  };
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  return isLoading ? (
+    <Loader></Loader>
+  ) : (
+    <main className={styles.mainGeneral}>
+      <div className={styles.main}>
+        <Header></Header>
+        <header className={styles.header}>
+          <Image src={Logo} alt="logo"></Image>
+          <input
+            className={styles.headerInput}
+            type="text"
+            placeholder="Search for a game.."
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
+          />
+
+          <select
+            className={styles.filtersSelect}
+            value={selectedOption}
+            onChange={handleOptionChange}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            <option value="name">Sort by name A-Z</option>
+            <option value="-name"> Sort by name Z-A</option>
+            <option value="-rating"> Best rating first</option>
+            <option value="rating"> Worst rating first</option>
+            <option value="released"> The oldest first</option>
+            <option value="-released"> Most recent first</option>
+          </select>
+        </header>
+        <div className={styles.body}>
+          <div className={styles.topBody}>
+            <p className={styles.h3}>All the games</p>
+          </div>
+          <div className={styles.listOfGame}>
+            {data.results.map((game, index) => {
+              return (
+                <div key={game.id}>
+                  <Link href={`/game/${game.slug}/${game.id}`}>
+                    <div className={styles.gameCard}>
+                      <p className={styles.gameLine}>{game.name}</p>
+
+                      <img
+                        className={styles.gameCardPicture}
+                        src={game.background_image}
+                        alt={game.id}
+                      />
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+          <div className={styles.pagination}>
+            <button
+              className={styles.paginationButton}
+              onClick={() => {
+                if (page > 1) {
+                  setPage(page - 1);
+                }
+              }}
+            >
+              ◀︎
+            </button>
+            <span className={styles.paginationButton}>{page}</span>
+            <button
+              className={styles.paginationButton}
+              onClick={() => {
+                if (data.next !== null) {
+                  setPage(page + 1);
+                } else {
+                  alert("no more");
+                }
+              }}
+            >
+              ▶︎
+            </button>
+          </div>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
     </main>
-  )
+  );
 }
