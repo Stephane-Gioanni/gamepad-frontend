@@ -75,9 +75,6 @@ export default function Home() {
           </select>
         </header>
         <div className={styles.body}>
-          <div className={styles.topBody}>
-            <p className={styles.h3}>All the games</p>
-          </div>
           <div className={styles.listOfGame}>
             {data.results.map((game, index) => {
               return (

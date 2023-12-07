@@ -67,7 +67,6 @@
 }
 
 .listOfGame {
-  margin-top: 40px;
   background-color: #1f2122;
   display: flex;
   flex-wrap: wrap;

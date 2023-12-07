@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { FcPlus } from "react-icons/fc";
 import Loader from "@/app/Components/Loader";
+import { FaWindowClose } from "react-icons/fa";
 
 export default function GamePage(params) {
   let id = params.params.slug2;
@@ -18,6 +19,7 @@ export default function GamePage(params) {
   const [collectionCookie, setCollectionCookie] = useState(
     Cookies.get("userCollection") || null
   );
+  const [needLog, setNeedLog] = useState(false);
 
   const [collection, setCollection] = useState(
     JSON.parse(collectionCookie) || []
@@ -131,7 +133,6 @@ export default function GamePage(params) {
 
                       for (let i = 0; i < newCollection.length; i++) {
                         if (newCollection[i].id === data.id) {
-                          alert("trouvé");
                           isFound = true;
                           break;
                         }
@@ -147,12 +148,28 @@ export default function GamePage(params) {
                         setInCollection(true);
                       }
                     } else {
-                      alert(
-                        "Vous devez posséder un compte pour créer une collection"
-                      );
+                      if (needLog === false) {
+                        setNeedLog(true);
+                      }
                     }
                   }}
                 >
+                  <div>
+                    {needLog === true ? (
+                      <div className={styles.alert}>
+                        <p>
+                          Your must be logged to add this game to a collection{" "}
+                        </p>
+                        <span
+                          className={styles.closeAlert}
+                          onClick={() => setNeedLog(false)}
+                        >
+                          <FaWindowClose />
+                        </span>
+                      </div>
+                    ) : null}
+                  </div>
+
                   <div>
                     {" "}
                     <p> Save to</p>{" "}

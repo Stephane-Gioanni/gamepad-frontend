@@ -113,7 +113,7 @@ export default function MyCollection() {
           <p>
             If not, create one
             <Link href="/signup">
-              <span className={styles.link}>here</span>
+              <span className={styles.link}> here</span>
             </Link>{" "}
             !
           </p>
