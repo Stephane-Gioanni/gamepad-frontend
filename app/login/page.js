@@ -22,10 +22,13 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/login", {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        "https://gamepad-api-09c0a7cf5370.herokuapp.com/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
       if (response.data.token) {
         console.log(response.data);
         setUser(response.data.token);

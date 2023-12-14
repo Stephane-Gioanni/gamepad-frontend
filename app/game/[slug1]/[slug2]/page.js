@@ -16,10 +16,10 @@ export default function GamePage(params) {
   const [logged, setLogged] = useState(Cookies.get("userToken") || null);
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [needLog, setNeedLog] = useState(false);
   const [collectionCookie, setCollectionCookie] = useState(
     Cookies.get("userCollection") || null
   );
-  const [needLog, setNeedLog] = useState(false);
 
   const [collection, setCollection] = useState(
     JSON.parse(collectionCookie) || []
@@ -29,7 +29,7 @@ export default function GamePage(params) {
   const saveBDD = async (value) => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/user-collection",
+        "https://gamepad-api-09c0a7cf5370.herokuapp.com/user-collection",
         {
           favorites: value,
           token: logged,
@@ -62,27 +62,27 @@ export default function GamePage(params) {
             },
           }
         );
-        console.log(response.data);
-        setData(response.data);
-        setIsLoading(false);
+        console.log("response.data", response.data);
+        console.log("collection", collection);
 
-        let newCollection = [...collection];
-        for (let i = 0; i < newCollection.length; i++) {
-          if (newCollection[i].id === response.data.id) {
-            setInCollection(true);
-          } else {
-            setInCollection(false);
+        for (let i = 0; i < collection.length; i++) {
+          if (response.data.id === collection[i].id) {
+            if (collection[i].inCollection === true) {
+              setInCollection(true);
+            } else {
+              setInCollection(false);
+            }
           }
         }
+
+        setData(response.data);
+        setIsLoading(false);
       } catch (error) {
         alert(error.message);
       }
     };
     fetchData();
   }, [id, collection]);
-
-  console.log(collection);
-  console.log(inCollection);
 
   return isLoading ? (
     <Loader></Loader>
@@ -142,10 +142,11 @@ export default function GamePage(params) {
                           name: data.name,
                           id: data.id,
                           image: data.background_image,
+                          inCollection: true,
                         });
                         setCollection(newCollection);
+
                         saveCollection(newCollection);
-                        setInCollection(true);
                       }
                     } else {
                       if (needLog === false) {
@@ -239,7 +240,7 @@ export default function GamePage(params) {
                 </div>
                 <div className={styles.infosBox}>
                   <p className={styles.infosTitle}>Age rating</p>
-                  <p>{data.esrb_rating.name}</p>
+                  {data.esrb_rating ? <p>{data.esrb_rating.name}</p> : null}
                 </div>
               </div>
             </div>

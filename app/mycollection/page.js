@@ -25,7 +25,7 @@ export default function MyCollection() {
   const saveBDD = async (value) => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/user-collection",
+        "https://gamepad-api-09c0a7cf5370.herokuapp.com/user-collection",
         {
           favorites: value,
           token: logged,

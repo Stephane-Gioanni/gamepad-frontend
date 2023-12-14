@@ -23,10 +23,13 @@ export default function Signup() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:4000/signup", {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        "https://gamepad-api-09c0a7cf5370.herokuapp.com/signup",
+        {
+          email: email,
+          password: password,
+        }
+      );
       if (response.data.token) {
         setUser(response.data.token);
         router.push("/");
